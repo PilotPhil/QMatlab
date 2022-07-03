@@ -42,9 +42,7 @@ add_executable(QMatlab
   ${PROJECT_SOURCES}
 )
 
-add_library(LibQMatlab
-    STATIC
-${PROJECT_SOURCES})
+
 
 target_link_libraries(QMatlab Qt${QT_VERSION_MAJOR}::Core
     ${Matlab_MAT_LIBRARY}
@@ -52,8 +50,31 @@ target_link_libraries(QMatlab Qt${QT_VERSION_MAJOR}::Core
     ${Matlab_MX_LIBRARY}
     ${Matlab_ENG_LIBRARY})
 
-target_link_libraries(LibQMatlab Qt${QT_VERSION_MAJOR}::Core
-    ${Matlab_MAT_LIBRARY}
-    ${Matlab_MEX_LIBRARY}
-    ${Matlab_MX_LIBRARY}
-    ${Matlab_ENG_LIBRARY})
+
+
+if(CMAKE_BUILD_TYPE AND (CMAKE_BUILD_TYPE STREQUAL "Debug"))
+    add_library(LibQMatlabD
+        STATIC
+    ${PROJECT_SOURCES})
+
+    target_link_libraries(LibQMatlabD Qt${QT_VERSION_MAJOR}::Core
+        ${Matlab_MAT_LIBRARY}
+        ${Matlab_MEX_LIBRARY}
+        ${Matlab_MX_LIBRARY}
+        ${Matlab_ENG_LIBRARY})
+
+elseif(CMAKE_BUILD_TYPE AND (CMAKE_BUILD_TYPE STREQUAL "Release"))
+    add_library(LibQMatlab
+        STATIC
+    ${PROJECT_SOURCES})
+
+    target_link_libraries(LibQMatlab Qt${QT_VERSION_MAJOR}::Core
+        ${Matlab_MAT_LIBRARY}
+        ${Matlab_MEX_LIBRARY}
+        ${Matlab_MX_LIBRARY}
+        ${Matlab_ENG_LIBRARY})
+
+else()
+endif()
+
+
